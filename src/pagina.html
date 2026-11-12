@@ -1,0 +1,640 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<!--CABECA-->
+<style>
+:root {
+  --sinal: #F5B800; --sinal-forte: #E0A600; --sobre-sinal: #111317;
+  --asfalto: #16181B; --asfalto-2: #0E1013; --asfalto-3: #1C1F24; --asfalto-4: #252930;
+  --linha: #2C313A; --linha-forte: #4A505B;
+  --papel: #F2F2EE; --branco: #FFFFFF;
+  --texto: #111317; --texto-2: #4A4F57;
+  --claro: #EDEFF2; --claro-2: #A8ADB5;
+  --azul-placa: #1F4FA3; --estrela: #A87200; --foco: #6CB4FF;
+  --titulo: "Barlow Condensed", "Arial Narrow", sans-serif;
+  --corpo: "Barlow", "Segoe UI", sans-serif;
+  --raio: 10px; --largura: 1240px;
+  --gutter: clamp(16px, 4vw, 40px);
+  --cab: 72px;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: calc(var(--cab) + 8px); -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--asfalto-2); color: var(--claro); font-family: var(--corpo); font-size: 17px; line-height: 1.5; -webkit-font-smoothing: antialiased; overflow-x: clip; }
+img, svg { display: block; max-width: 100%; }
+a { color: inherit; }
+h1, h2, h3 { font-family: var(--titulo); margin: 0; line-height: 1.02; }
+p { margin: 0; }
+ul, ol { margin: 0; padding: 0; list-style: none; }
+:focus-visible { outline: 3px solid var(--foco); outline-offset: 3px; border-radius: 4px; }
+.pular { position: absolute; left: 12px; top: -60px; z-index: 100; background: var(--branco); color: var(--texto); padding: 10px 14px; border-radius: 6px; font-weight: 600; }
+.pular:focus { top: 12px; }
+.envoltorio { width: 100%; max-width: var(--largura); margin: 0 auto; padding-left: var(--gutter); padding-right: var(--gutter); }
+.ico { width: 22px; height: 22px; flex: none; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+/* botões */
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 52px; padding: 0 22px; border-radius: 8px; font-family: var(--titulo); font-weight: 700; font-size: 20px; letter-spacing: .02em; text-decoration: none; text-transform: uppercase; border: 2px solid transparent; transition: transform .18s ease, background-color .18s ease, border-color .18s ease; white-space: nowrap; cursor: pointer; }
+.btn:hover { transform: translateY(-2px); }
+.btn-sinal { background: var(--sinal); color: var(--sobre-sinal); box-shadow: 0 10px 30px -12px rgba(245,184,0,.7); }
+.btn-sinal:hover { background: #FFC61F; }
+.btn-contorno { border-color: rgba(255,255,255,.75); color: var(--branco); background: rgba(14,16,19,.35); }
+.btn-contorno:hover { border-color: var(--branco); background: rgba(255,255,255,.08); }
+.btn-escuro { background: var(--asfalto); color: var(--branco); }
+
+/* placa Mercosul e marco de km */
+.placa { display: inline-flex; flex-direction: column; background: var(--branco); color: #111317; border: 2px solid #111317; border-radius: 6px; overflow: hidden; font-family: var(--titulo); font-weight: 700; line-height: 1; text-decoration: none; }
+.placa .faixa { position: relative; display: block; text-align: center; background: var(--azul-placa); color: var(--branco); font-family: var(--corpo); font-weight: 700; font-size: 10px; letter-spacing: .28em; padding: 4px 34px; }
+.placa .faixa::after { content: ""; position: absolute; right: 7px; top: 50%; width: 14px; height: 10px; transform: translateY(-50%); background: #0A8F3C; border-radius: 1px; }
+.placa .faixa::before { content: ""; position: absolute; right: 10px; top: 50%; width: 8px; height: 6px; transform: translateY(-50%); background: #F5D000; clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%); z-index: 1; }
+.placa .txt { padding: 8px 22px 6px; font-size: clamp(30px, 4vw, 52px); letter-spacing: .04em; text-align: center; }
+.marco { display: inline-flex; align-items: center; gap: 12px; font-family: var(--titulo); font-weight: 600; font-size: 17px; letter-spacing: .14em; text-transform: uppercase; color: var(--claro-2); }
+.marco b { display: inline-grid; place-items: center; min-width: 54px; height: 30px; padding: 0 8px; border-radius: 4px; background: var(--branco); color: #111317; border: 2px solid #111317; outline: 2px solid var(--branco); letter-spacing: .06em; font-size: 16px; }
+.claro .marco { color: var(--texto-2); }
+.claro .marco b { background: var(--asfalto); color: var(--branco); border-color: var(--asfalto); outline-color: var(--asfalto); }
+.zebra { height: 8px; background: repeating-linear-gradient(-45deg, var(--sinal) 0 14px, #16181B 14px 28px); }
+
+/* cabeçalho */
+.topo { position: sticky; top: 0; z-index: 50; height: var(--cab); background: rgba(14,16,19,.95); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border-bottom: 1px solid rgba(255,255,255,.07); }
+.topo .envoltorio { display: flex; align-items: center; gap: 28px; height: 100%; max-width: 1400px; }
+.marca { display: flex; align-items: center; gap: 12px; text-decoration: none; flex: none; min-height: 44px; }
+.marca img { width: 44px; height: 44px; border-radius: 10px; }
+.marca .nome { display: flex; flex-direction: column; line-height: .92; font-family: var(--titulo); font-weight: 800; font-size: 23px; text-transform: uppercase; }
+.marca .nome span:nth-child(2) { color: var(--sinal); }
+.marca .nome small { font-family: var(--corpo); font-weight: 500; font-size: 9.5px; letter-spacing: .26em; color: var(--claro-2); text-transform: lowercase; margin-top: 3px; }
+.nav { display: flex; gap: 4px; margin-left: auto; }
+.nav a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 12px; text-decoration: none; font-weight: 600; font-size: 15.5px; color: var(--claro); position: relative; }
+.nav a::after { content: ""; position: absolute; left: 12px; right: 12px; bottom: 8px; height: 2px; background: var(--branco); transform: scaleX(0); transform-origin: left; transition: transform .2s ease; }
+.nav a:hover::after { transform: scaleX(1); }
+.topo .btn { min-height: 48px; font-size: 18px; padding: 0 18px; }
+.menu-btn { display: none; margin-left: auto; width: 48px; height: 48px; border-radius: 8px; border: 1px solid var(--linha-forte); background: transparent; color: var(--branco); align-items: center; justify-content: center; cursor: pointer; }
+.menu-painel { display: none; }
+
+/* topo com a cena 3D */
+.estrada { position: relative; background: #0b0d10; }
+.palco { position: sticky; top: 0; height: 100vh; height: 100lvh; margin-bottom: -100vh; margin-bottom: -100lvh; z-index: 0; overflow: hidden; pointer-events: none; }
+.palco canvas, .palco .ilustracao { position: absolute; inset: 0; width: 100%; height: 100%; transition: opacity .9s ease; }
+.palco canvas { opacity: 0; }
+.palco.pronto canvas { opacity: 1; }
+.palco.pronto .ilustracao { opacity: 0; }
+.vinheta { position: absolute; inset: 0; background: linear-gradient(90deg, rgba(11,13,16,.88) 0%, rgba(11,13,16,.6) 34%, rgba(11,13,16,0) 62%), linear-gradient(180deg, rgba(11,13,16,.55) 0%, rgba(11,13,16,0) 22%); opacity: calc(1 - var(--p, 0) * .55); }
+.ilu-caminhao { transform: translate(870px, 500px); }
+.hero { position: relative; z-index: 1; min-height: calc(100vh - var(--cab)); min-height: calc(100svh - var(--cab)); display: flex; align-items: center; padding: 48px 0 96px; }
+.hero .envoltorio { max-width: 1400px; }
+.hero-texto { max-width: 620px; }
+.ao-vivo { display: inline-flex; align-items: center; gap: 10px; padding: 7px 14px 7px 12px; border-radius: 999px; background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.14); font-size: 14.5px; font-weight: 600; margin-bottom: 22px; }
+.pisca { width: 10px; height: 10px; border-radius: 50%; background: var(--sinal); animation: pisca 1.6s ease-out infinite; }
+@keyframes pisca { 0% { box-shadow: 0 0 0 0 rgba(245,184,0,.65); } 70% { box-shadow: 0 0 0 10px rgba(245,184,0,0); } 100% { box-shadow: 0 0 0 0 rgba(245,184,0,0); } }
+.hero h1 { font-weight: 800; text-transform: uppercase; }
+.hero h1 .a { display: block; font-size: clamp(56px, 8.6vw, 128px); line-height: .86; color: var(--branco); }
+.hero h1 .a em { font-style: normal; color: var(--sinal); }
+.hero h1 .b { display: block; margin-top: 14px; font-size: clamp(25px, 3vw, 42px); font-weight: 600; line-height: 1.05; color: var(--claro); text-transform: none; }
+.hero-sub { margin-top: 18px; max-width: 500px; font-size: clamp(16.5px, 1.35vw, 19px); color: #C9CDD3; }
+.hero-acoes { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
+.hero-acoes .btn { min-height: 58px; font-size: 21px; }
+.numeros { display: flex; flex-wrap: wrap; gap: 6px 0; margin-top: 30px; font-family: var(--titulo); text-transform: uppercase; letter-spacing: .06em; font-size: 16px; color: var(--claro-2); }
+.numeros li { display: flex; align-items: baseline; gap: 8px; padding-right: 18px; margin-right: 18px; border-right: 2px dashed #4A505B; }
+.numeros li:last-child { border: 0; margin: 0; padding: 0; }
+.numeros b { font-size: 30px; font-weight: 800; color: var(--branco); letter-spacing: 0; }
+.rolar { position: absolute; left: var(--gutter); bottom: 26px; display: flex; align-items: center; gap: 12px; font-family: var(--titulo); font-weight: 600; font-size: 15px; letter-spacing: .16em; text-transform: uppercase; color: var(--claro-2); }
+.rolar i { display: block; width: 2px; height: 38px; background: linear-gradient(var(--claro-2) 50%, transparent 0) 0 0 / 2px 12px; animation: faixa 1s linear infinite; }
+@keyframes faixa { to { background-position: 0 12px; } }
+
+/* serviços (faixa curta) */
+.servicos { position: relative; z-index: 1; padding: 14vh 0 72px; }
+.servicos .envoltorio { max-width: 1400px; }
+.servicos-cabeca { display: grid; justify-items: end; text-align: right; }
+.palavra { font-weight: 800; text-transform: uppercase; font-size: clamp(76px, 13vw, 210px); line-height: .8; color: var(--branco); margin: 12px -0.04em 0 0; }
+.servicos-lista { display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; margin-top: 34px; }
+.servico { display: flex; flex-direction: column; gap: 14px; padding: 20px 18px; min-height: 148px; border-radius: var(--raio); background: rgba(22,24,27,.94); border: 1px solid var(--linha); transition: border-color .2s ease, transform .2s ease; }
+.servico:hover { border-color: var(--linha-forte); transform: translateY(-3px); }
+.servico .ico { width: 30px; height: 30px; color: var(--sinal); stroke-width: 1.8; }
+.servico span { font-family: var(--titulo); font-weight: 700; font-size: 22px; line-height: 1.05; color: var(--branco); }
+
+/* parceiros (faixa rolando) */
+.parceiros { position: relative; z-index: 1; background: var(--papel); color: var(--texto); border-bottom: 1px solid #D9DBDF; overflow: hidden; }
+.parceiros .envoltorio { display: flex; align-items: center; gap: 24px; min-height: 84px; max-width: none; }
+.parceiros h2 { flex: none; font-size: 15px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--texto-2); line-height: 1.2; max-width: 150px; }
+.trilho-parceiros { flex: 1; overflow: hidden; -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent); mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent); }
+.fita { display: flex; width: max-content; animation: fita 36s linear infinite; }
+.trilho-parceiros:hover .fita { animation-play-state: paused; }
+.fita ul { display: flex; gap: 12px; padding-right: 12px; }
+.selo { display: inline-flex; align-items: center; min-height: 46px; padding: 0 18px; border: 2px solid var(--asfalto); border-radius: 6px; background: var(--branco); font-family: var(--titulo); font-weight: 700; font-size: 19px; letter-spacing: .03em; text-transform: uppercase; white-space: nowrap; }
+@keyframes fita { to { transform: translateX(-50%); } }
+
+/* KM 02: etapas */
+.etapas { position: relative; background: #0b0d10; color: var(--claro); }
+.etapas-palco { display: grid; grid-template-areas: "cabeca" "cena" "base"; padding: 72px 0; }
+.etapas-ui { display: contents; }
+.etapas-cabeca { grid-area: cabeca; margin-bottom: 24px; }
+.etapas-cabeca h2 { font-size: clamp(40px, 4.6vw, 68px); font-weight: 800; text-transform: uppercase; line-height: .96; color: var(--branco); margin-top: 14px; }
+.etapas-cena { grid-area: cena; position: relative; height: clamp(260px, 42vh, 440px); overflow: hidden; margin-bottom: 24px; }
+.etapas-cena canvas, .etapas-cena .ilustracao { position: absolute; inset: 0; width: 100%; height: 100%; transition: opacity .9s ease; }
+.etapas-cena canvas { opacity: 0; }
+.etapas-cena.pronto canvas { opacity: 1; }
+.etapas-cena.pronto .ilustracao { opacity: 0; }
+.etapas-vinheta { position: absolute; inset: 0; pointer-events: none; background: linear-gradient(180deg, rgba(11,13,16,.7) 0%, rgba(11,13,16,0) 22%, rgba(11,13,16,0) 76%, rgba(11,13,16,.75) 100%); }
+.etapas-base { grid-area: base; }
+.etapas-progresso { display: none; }
+.trajeto { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+.passo { position: relative; display: grid; grid-template-columns: auto 1fr; gap: 2px 14px; align-content: start; background: rgba(22,24,27,.92); border: 1px solid var(--linha); border-radius: var(--raio); padding: 16px 18px; transition: background-color .45s ease, border-color .45s ease, opacity .45s ease, transform .45s cubic-bezier(.2,.7,.2,1); }
+.passo .pino { grid-row: span 2; position: relative; display: grid; place-items: center; width: 48px; height: 48px; border-radius: 50%; background: var(--asfalto-4); border: 2px solid #4A505B; color: var(--branco); transition: background-color .45s ease, border-color .45s ease, color .45s ease; }
+.passo .pino .ico { width: 22px; height: 22px; }
+.passo h3 { font-size: 24px; font-weight: 700; color: var(--branco); line-height: 1.05; align-self: end; }
+.passo p { color: #C3C7CD; font-size: 15px; }
+.passo .feito { position: absolute; right: -4px; bottom: -4px; width: 22px; height: 22px; border-radius: 50%; background: var(--sinal); color: var(--sobre-sinal); display: grid; place-items: center; opacity: 0; transform: scale(.4); transition: opacity .3s ease, transform .3s cubic-bezier(.3,1.6,.5,1); }
+.passo .feito .ico { width: 14px; height: 14px; stroke-width: 3.2; }
+.etapas.animado .etapas-trilho { height: 250vh; }
+.etapas.animado .etapas-palco { position: sticky; top: 0; display: block; height: 100vh; height: 100svh; padding: 0; overflow: hidden; }
+.etapas.animado .etapas-cena { position: absolute; inset: 0; height: auto; margin: 0; }
+.etapas.animado .etapas-ui { display: flex; flex-direction: column; justify-content: space-between; position: absolute; inset: 0; padding: calc(var(--cab) + 24px) 0 24px; pointer-events: none; }
+.etapas.animado .etapas-ui > * { pointer-events: auto; }
+.etapas.animado .etapas-cabeca { margin: 0; }
+.etapas.animado .etapas-progresso { display: block; position: relative; height: 34px; margin: 0 12% 12px; }
+.etapas-progresso .trilha { position: absolute; left: 0; right: 0; top: 12px; height: 10px; border-radius: 3px; background: #23262c; overflow: hidden; }
+.etapas-progresso .trilha::after { content: ""; position: absolute; left: 0; right: 0; top: 4px; height: 2px; background: repeating-linear-gradient(90deg, #6b717c 0 12px, transparent 12px 22px); }
+.etapas-progresso .enchimento { position: absolute; left: 0; top: 0; bottom: 0; width: calc(var(--b, 0) * 100%); background: var(--sinal); z-index: 1; }
+.etapas-progresso .ponto { position: absolute; top: 0; left: calc(var(--i) * 33.3333%); width: 34px; height: 34px; margin-left: -17px; border-radius: 50%; display: grid; place-items: center; background: #1C1F24; border: 2px solid #4A505B; font-family: var(--titulo); font-weight: 700; font-size: 17px; color: var(--claro-2); z-index: 2; transition: background-color .35s ease, color .35s ease, border-color .35s ease, transform .35s ease; }
+.etapas-progresso .ponto.feito-p, .etapas-progresso .ponto.ativo-p { background: var(--sinal); border-color: var(--sinal); color: var(--sobre-sinal); }
+.etapas-progresso .ponto.ativo-p { transform: scale(1.18); box-shadow: 0 0 0 6px rgba(245,184,0,.18); }
+.etapas.animado .passo { opacity: .5; }
+.etapas.animado .passo.feita { opacity: .8; }
+.etapas.animado .passo.feita .feito { opacity: 1; transform: none; }
+.etapas.animado .passo.ativa { opacity: 1; background: var(--branco); border-color: var(--branco); transform: translateY(-6px); box-shadow: 0 24px 50px -24px rgba(0,0,0,.9); }
+.etapas.animado .passo.ativa .pino { background: var(--sinal); border-color: var(--sinal); color: var(--sobre-sinal); }
+.etapas.animado .passo.ativa h3 { color: var(--texto); }
+.etapas.animado .passo.ativa p { color: var(--texto-2); }
+
+/* depoimentos em linha */
+.depoimentos { background: var(--papel); color: var(--texto); padding: clamp(64px, 7vw, 96px) 0; }
+.depo-topo { display: flex; align-items: end; justify-content: space-between; gap: 20px; margin-bottom: 28px; }
+.depo-topo h2 { font-size: clamp(40px, 4.6vw, 68px); font-weight: 800; text-transform: uppercase; line-height: .96; margin-top: 14px; }
+.setas { display: flex; gap: 8px; }
+.setas button { width: 52px; height: 52px; border-radius: 50%; border: 2px solid var(--asfalto); background: var(--branco); color: var(--asfalto); display: grid; place-items: center; cursor: pointer; transition: background-color .2s ease, color .2s ease; }
+.setas button:hover { background: var(--asfalto); color: var(--branco); }
+.setas .voltar .ico { transform: scaleX(-1); }
+.carrossel { display: grid; grid-auto-flow: column; grid-auto-columns: min(320px, 80vw); gap: 14px; overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x mandatory; scroll-padding-left: max(var(--gutter), calc((100vw - var(--largura)) / 2 + var(--gutter))); padding: 4px max(var(--gutter), calc((100vw - var(--largura)) / 2 + var(--gutter))) 18px; scrollbar-width: thin; scrollbar-color: #B9BCC2 transparent; }
+.carrossel > * { scroll-snap-align: start; display: flex; }
+.carrossel > * > figure { flex: 1; }
+.depo { margin: 0; background: var(--branco); border: 1px solid #D9DBDF; border-radius: var(--raio); padding: 22px; display: flex; flex-direction: column; gap: 14px; min-height: 250px; }
+.estrelas { display: flex; gap: 3px; color: var(--estrela); }
+.estrelas .ico { width: 18px; height: 18px; fill: currentColor; stroke: none; }
+.depo blockquote { margin: 0; font-size: 17px; line-height: 1.5; }
+.depo figcaption { margin-top: auto; display: flex; align-items: center; gap: 12px; font-weight: 700; font-size: 16px; }
+.depo figcaption img { width: 46px; height: 46px; border-radius: 50%; background: var(--sinal); }
+.depo figcaption small { display: block; font-weight: 500; color: var(--texto-2); font-size: 13.5px; }
+.foto { position: relative; margin: 0; border-radius: var(--raio); overflow: hidden; min-height: 250px; background: #15181d; }
+.foto img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.foto figcaption { position: absolute; left: 0; right: 0; bottom: 0; padding: 40px 18px 16px; font-family: var(--titulo); font-weight: 700; font-size: 21px; color: var(--branco); background: linear-gradient(transparent, rgba(0,0,0,.82)); }
+
+/* contato */
+.contato { background: var(--asfalto); padding: clamp(64px, 7vw, 96px) 0; }
+.contato-grade { display: grid; grid-template-columns: 1.15fr 1fr; gap: clamp(28px, 5vw, 72px); align-items: stretch; }
+.contato h2 { font-size: clamp(46px, 5.6vw, 84px); font-weight: 800; text-transform: uppercase; line-height: .9; color: var(--branco); margin-top: 14px; }
+.placa-grande { margin-top: 24px; transition: transform .2s ease; }
+.placa-grande:hover { transform: translateY(-2px) rotate(-.5deg); }
+.contato .acoes { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 22px; }
+.info { margin-top: 26px; display: grid; gap: 10px; color: #C9CDD3; }
+.info li { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+.info .ico { color: var(--claro-2); }
+.info a { color: var(--branco); font-weight: 600; text-underline-offset: 3px; display: inline-flex; align-items: center; min-height: 44px; }
+.contato-foto { position: relative; margin: 0; border-radius: 14px; overflow: hidden; min-height: 380px; border: 1px solid var(--linha); }
+.contato-foto img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 60%; }
+.contato-foto figcaption { position: absolute; left: 16px; bottom: 16px; display: inline-flex; align-items: center; gap: 8px; padding: 8px 14px; border-radius: 999px; background: rgba(14,16,19,.86); font-weight: 600; font-size: 14.5px; }
+
+/* rodapé */
+.rodape { background: #08090b; color: var(--claro-2); font-size: 14.5px; }
+.rodape-linha { display: flex; flex-wrap: wrap; align-items: center; gap: 18px 40px; padding-top: 36px; padding-bottom: 24px; }
+.rodape address { font-style: normal; line-height: 1.55; }
+.rodape .links { display: flex; gap: 6px; margin-left: auto; }
+.rodape .links a { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 12px; border-radius: 8px; border: 1px solid var(--linha); text-decoration: none; color: var(--claro); }
+.rodape .links a:hover { border-color: var(--linha-forte); }
+.rodape .base { border-top: 1px solid #1d2026; padding-top: 16px; padding-bottom: 24px; display: flex; flex-wrap: wrap; gap: 6px 24px; justify-content: space-between; font-size: 13px; }
+
+.barra-acao { display: none; }
+.js .revelar { opacity: 0; transform: translateY(22px); transition: opacity .7s ease, transform .7s cubic-bezier(.2,.7,.2,1); }
+.js .revelar.visivel { opacity: 1; transform: none; }
+.js .hero-texto > * { animation: entra .9s cubic-bezier(.2,.7,.2,1) both; }
+.js .hero-texto > :nth-child(2) { animation-delay: .08s; }
+.js .hero-texto > :nth-child(3) { animation-delay: .16s; }
+.js .hero-texto > :nth-child(4) { animation-delay: .24s; }
+.js .hero-texto > :nth-child(5) { animation-delay: .32s; }
+@keyframes entra { from { opacity: 0; transform: translateY(18px); } }
+
+@media (max-width: 1180px) {
+  .nav a { padding: 0 9px; }
+  .servicos-lista { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 1020px) {
+  .nav, .topo .btn-cab { display: none; }
+  .menu-btn { display: inline-flex; }
+  .menu-painel { position: fixed; top: var(--cab); left: 0; right: 0; z-index: 49; background: rgba(14,16,19,.98); border-bottom: 1px solid var(--linha); padding: 8px var(--gutter) 20px; }
+  .menu-painel.aberto { display: block; }
+  .menu-painel a { display: flex; align-items: center; min-height: 54px; border-bottom: 1px solid var(--linha); text-decoration: none; font-family: var(--titulo); font-weight: 700; font-size: 26px; text-transform: uppercase; color: var(--branco); }
+  .menu-painel .btn { margin-top: 18px; width: 100%; border-bottom: 0; color: var(--sobre-sinal); }
+  .trajeto { grid-template-columns: 1fr 1fr; }
+  .etapas.animado .trajeto { grid-template-columns: repeat(4, 1fr); gap: 8px; }
+  .etapas.animado .passo { grid-template-columns: 1fr; padding: 12px; }
+  .etapas.animado .passo .pino { grid-row: auto; width: 40px; height: 40px; margin-bottom: 6px; }
+  .etapas.animado .passo h3 { font-size: 20px; }
+  .etapas.animado .passo p { font-size: 14px; }
+  .contato-grade { grid-template-columns: 1fr; }
+  .contato-foto { min-height: 300px; }
+}
+@media (max-width: 760px) {
+  :root { --cab: 64px; }
+  body { font-size: 16.5px; padding-bottom: calc(76px + env(safe-area-inset-bottom)); }
+  .marca img { width: 40px; height: 40px; }
+  .marca .nome { font-size: 21px; }
+  .vinheta { background: linear-gradient(180deg, rgba(11,13,16,.9) 0%, rgba(11,13,16,.78) 48%, rgba(11,13,16,0) 66%); }
+  .ilu-caminhao { transform: translate(540px, 560px) scale(1.05); }
+  .hero { align-items: flex-start; padding: 28px 0 0; min-height: 0; }
+  .hero-texto { padding-bottom: 34vh; }
+  .ao-vivo { font-size: 13.5px; margin-bottom: 16px; }
+  .hero h1 .b { margin-top: 10px; }
+  .hero-sub { margin-top: 14px; font-size: 16px; }
+  .hero-acoes { margin-top: 22px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .hero-acoes .btn { min-height: 54px; font-size: 18px; padding: 0 10px; }
+  .hero-acoes .btn .longo { display: none; }
+  .numeros { margin-top: 20px; font-size: 13.5px; }
+  .numeros li { padding-right: 12px; margin-right: 12px; }
+  .numeros b { font-size: 24px; }
+  .rolar { display: none; }
+  .servicos { padding-top: 10vh; padding-bottom: 56px; }
+  .servicos-cabeca { justify-items: start; text-align: left; }
+  .palavra { margin-left: -0.03em; }
+  .servicos-lista { grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 24px; }
+  .servico { min-height: 0; padding: 16px 14px; gap: 10px; }
+  .servico span { font-size: 19px; }
+  .parceiros .envoltorio { min-height: 72px; gap: 14px; }
+  .parceiros h2 { font-size: 12px; max-width: 90px; }
+  .selo { font-size: 16px; min-height: 40px; padding: 0 12px; }
+  .trajeto { grid-template-columns: 1fr; }
+  .etapas-cena { height: 260px; }
+  .etapas.animado .etapas-ui { padding: calc(var(--cab) + 16px) 0 calc(88px + env(safe-area-inset-bottom)); }
+  .etapas.animado .etapas-progresso { margin: 0 17px 12px; }
+  .etapas.animado .trajeto { display: grid; grid-template-columns: 1fr; }
+  .etapas.animado .passo { grid-area: 1 / 1; opacity: 0; transform: translateY(14px); pointer-events: none; grid-template-columns: auto 1fr; padding: 14px 16px; }
+  .etapas.animado .passo .pino { grid-row: span 2; width: 48px; height: 48px; margin: 0; }
+  .etapas.animado .passo h3 { font-size: 23px; }
+  .etapas.animado .passo p { font-size: 15px; }
+  .etapas.animado .passo.feita { opacity: 0; }
+  .etapas.animado .passo.ativa { opacity: 1; transform: none; pointer-events: auto; }
+  .depo-topo .setas { display: none; }
+  .contato .acoes .btn { flex: 1 1 100%; }
+  .rodape .links { margin-left: 0; }
+  .barra-acao { display: grid; grid-template-columns: 1.35fr 1fr; gap: 8px; position: fixed; left: 0; right: 0; bottom: 0; z-index: 60; padding: 10px 12px calc(10px + env(safe-area-inset-bottom)); background: rgba(14,16,19,.94); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-top: 1px solid var(--linha); }
+  .barra-acao .btn { min-height: 54px; font-size: 18px; padding: 0 10px; }
+}
+@media (max-width: 380px) {
+  .hero h1 .a { font-size: 52px; }
+  .hero-acoes .btn { font-size: 16.5px; gap: 6px; }
+  .placa-grande .txt { font-size: 28px; padding: 8px 14px 6px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  .js .revelar { opacity: 1; transform: none; }
+  .fita { flex-wrap: wrap; width: auto; }
+  .fita ul[aria-hidden="true"] { display: none; }
+  .fita ul { flex-wrap: wrap; padding: 12px 0; }
+  .trilho-parceiros { -webkit-mask-image: none; mask-image: none; }
+}
+</style>
+</head>
+<body>
+<!--SIMBOLOS-->
+
+<a class="pular" href="#conteudo">Pular para o conteúdo</a>
+
+<header class="topo">
+  <div class="envoltorio">
+    <a class="marca" href="#inicio" aria-label="Thiago Guinchos, página inicial">
+      <img src="assets/gancho.svg" alt="" width="44" height="44">
+      <span class="nome" aria-hidden="true"><span>Thiago</span><span>Guinchos</span><small>entregando segurança</small></span>
+    </a>
+    <nav class="nav" aria-label="Principal">
+      <a href="#servicos">Serviços</a>
+      <a href="#como-funciona">Como funciona</a>
+      <a href="#depoimentos">Depoimentos</a>
+      <a href="#contato">Contato</a>
+    </nav>
+    <a class="btn btn-sinal btn-cab" href="https://wa.me/5571982465436?text=Ol%C3%A1!%20Preciso%20de%20um%20guincho." target="_blank" rel="noopener"><svg class="ico" aria-hidden="true"><use href="#i-whats"/></svg><span>Chamar guincho agora</span></a>
+    <button class="menu-btn" type="button" aria-expanded="false" aria-controls="menu-celular" aria-label="Abrir menu"><svg class="ico" aria-hidden="true"><use href="#i-menu"/></svg></button>
+  </div>
+</header>
+<div class="menu-painel" id="menu-celular">
+  <nav aria-label="Menu do celular">
+    <a href="#servicos">Serviços</a>
+    <a href="#como-funciona">Como funciona</a>
+    <a href="#depoimentos">Depoimentos</a>
+    <a href="#contato">Contato</a>
+    <a class="btn btn-sinal" href="https://wa.me/5571982465436?text=Ol%C3%A1!%20Preciso%20de%20um%20guincho." target="_blank" rel="noopener"><svg class="ico" aria-hidden="true"><use href="#i-whats"/></svg>Chamar guincho agora</a>
+  </nav>
+</div>
+
+<main id="conteudo">
+  <div class="estrada" id="inicio">
+    <div class="palco" aria-hidden="true">
+      <svg class="ilustracao" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMax slice" role="presentation">
+        <defs>
+          <linearGradient id="ceu" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#07090c"/><stop offset=".55" stop-color="#121720"/><stop offset=".68" stop-color="#1d2230"/><stop offset=".69" stop-color="#14171c"/><stop offset="1" stop-color="#0d0f12"/></linearGradient>
+          <radialGradient id="brilho" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#FFC21A" stop-opacity=".9"/><stop offset="1" stop-color="#FFC21A" stop-opacity="0"/></radialGradient>
+          <radialGradient id="farolg" cx="0" cy=".5" r="1"><stop offset="0" stop-color="#fff3d1" stop-opacity=".45"/><stop offset="1" stop-color="#fff3d1" stop-opacity="0"/></radialGradient>
+        </defs>
+        <rect width="1600" height="900" fill="url(#ceu)"/>
+        <path d="M0 612 h70 v-40 h40 v40 h60 v-70 h26 v70 h90 v-28 h50 v28 h40 V470 h12 v142 h60 v-50 h80 v50 h120 v-36 h40 v36 h70 V430 h10 v182 h40 v-60 h90 v60 h100 v-30 h60 v30 h80 v-80 h30 v80 h120 v-44 h70 v44 h112 v8 H0z" fill="#0b0d11"/>
+        <path d="M0 640 H1600 V900 H0z" fill="#191c21"/>
+        <path d="M0 652 H1600" stroke="#7d8087" stroke-width="3"/>
+        <path d="M0 770 H1600" stroke="#9a9da3" stroke-width="5" stroke-dasharray="70 60"/>
+        <path d="M0 880 H1600" stroke="#7d8087" stroke-width="4"/>
+        <g class="ilu-caminhao">
+          <path d="M470 150 L1100 120 L1100 260 L470 230z" fill="url(#farolg)"/>
+          <ellipse cx="240" cy="236" rx="290" ry="18" fill="#000" opacity=".5"/>
+          <rect x="0" y="150" width="380" height="16" rx="3" fill="#2f343c"/><rect x="0" y="166" width="380" height="5" fill="#F5B800"/>
+          <rect x="6" y="172" width="460" height="22" rx="4" fill="#15171a"/>
+          <path d="M40 150 c6-30 30-48 70-52 l60-30 h110 c22 0 36 12 52 34 l26 8 c10 3 14 10 14 20 v20z" fill="#40576f"/>
+          <path d="M178 76 h96 c14 0 24 8 34 24 h-150z" fill="#0c1016"/>
+          <rect x="384" y="40" width="10" height="112" fill="#15171a"/>
+          <path d="M398 30 h96 c12 0 18 6 20 16 l10 66 v62 h-126z" fill="#f2f2ee"/>
+          <path d="M440 46 h56 c6 0 10 4 11 10 l8 50 h-75z" fill="#0c1016"/>
+          <rect x="398" y="128" width="126" height="10" fill="#F5B800"/>
+          <rect x="516" y="146" width="14" height="14" rx="2" fill="#fff6dc"/>
+          <rect x="420" y="22" width="46" height="10" rx="3" fill="#FFC21A"/>
+          <circle cx="443" cy="24" r="60" fill="url(#brilho)"/>
+          <g fill="#0d0e10"><circle cx="110" cy="200" r="34"/><circle cx="196" cy="200" r="34"/><circle cx="460" cy="200" r="34"/></g>
+          <g fill="#9aa0a8"><circle cx="110" cy="200" r="14"/><circle cx="196" cy="200" r="14"/><circle cx="460" cy="200" r="14"/></g>
+          <g fill="#0d0e10"><circle cx="96" cy="150" r="20"/><circle cx="292" cy="150" r="20"/></g>
+        </g>
+      </svg>
+      <canvas id="cena"></canvas>
+      <div class="vinheta"></div>
+    </div>
+
+    <section class="hero" aria-labelledby="t-hero">
+      <div class="envoltorio">
+        <div class="hero-texto">
+          <p class="ao-vivo"><span class="pisca" aria-hidden="true"></span>Plantão 24 horas · Camaçari e região</p>
+          <h1 id="t-hero"><span class="a">Guincho <em>24</em> horas</span><span class="b">Atendimento rápido e confiável</span></h1>
+          <p class="hero-sub">Guincho e reboque em Camaçari e região, de carros a extra pesados.</p>
+          <div class="hero-acoes">
+            <a class="btn btn-sinal" href="https://wa.me/5571982465436?text=Ol%C3%A1!%20Preciso%20de%20um%20guincho." target="_blank" rel="noopener"><svg class="ico" aria-hidden="true"><use href="#i-whats"/></svg><span><span class="longo">Chamar no </span>WhatsApp</span></a>
+            <a class="btn btn-contorno" href="tel:+5571982465436"><svg class="ico" aria-hidden="true"><use href="#i-telefone"/></svg>Ligar agora</a>
+          </div>
+          <ul class="numeros" aria-label="Números da empresa">
+            <li><b>2020</b>desde</li>
+            <li><b>10</b>caminhões próprios</li>
+            <li><b>24h</b>todo dia</li>
+          </ul>
+        </div>
+      </div>
+      <p class="rolar" aria-hidden="true"><i></i>Role e acompanhe o trajeto</p>
+    </section>
+
+    <section id="servicos" class="servicos" aria-labelledby="t-servicos">
+      <div class="envoltorio">
+        <div class="servicos-cabeca">
+          <p class="marco"><b>KM 01</b>O que fazemos</p>
+          <h2 id="t-servicos" class="palavra">Serviços</h2>
+        </div>
+        <ul class="servicos-lista">
+          <li class="servico revelar"><svg class="ico" aria-hidden="true"><use href="#i-caminhao"/></svg><span>Reboque leve a extra pesado</span></li>
+          <li class="servico revelar"><svg class="ico" aria-hidden="true"><use href="#i-chave"/></svg><span>Assistência na estrada</span></li>
+          <li class="servico revelar"><svg class="ico" aria-hidden="true"><use href="#i-alerta"/></svg><span>Remoção pós-acidente</span></li>
+          <li class="servico revelar"><svg class="ico" aria-hidden="true"><use href="#i-globo"/></svg><span>Longa distância, todo o Brasil</span></li>
+          <li class="servico revelar"><svg class="ico" aria-hidden="true"><use href="#i-plataforma"/></svg><span>Plataforma e guincho</span></li>
+          <li class="servico revelar"><svg class="ico" aria-hidden="true"><use href="#i-relogio"/></svg><span>Socorro 24h</span></li>
+        </ul>
+      </div>
+    </section>
+  </div>
+
+  <section class="parceiros" aria-labelledby="t-parceiros">
+    <div class="envoltorio">
+      <h2 id="t-parceiros">Seguradoras parceiras</h2>
+      <div class="trilho-parceiros">
+        <div class="fita">
+          <ul>
+            <li class="selo">Porto Seguro</li><li class="selo">Tato Assist</li><li class="selo">APVS Brasil</li><li class="selo">Foco Proteção Veicular</li><li class="selo">Gol Plus Proteção Veicular</li><li class="selo">Localiza</li><li class="selo">S Group</li>
+          </ul>
+          <ul aria-hidden="true">
+            <li class="selo">Porto Seguro</li><li class="selo">Tato Assist</li><li class="selo">APVS Brasil</li><li class="selo">Foco Proteção Veicular</li><li class="selo">Gol Plus Proteção Veicular</li><li class="selo">Localiza</li><li class="selo">S Group</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="como-funciona" class="etapas" aria-labelledby="t-como">
+    <div class="etapas-trilho">
+      <div class="etapas-palco">
+        <div class="etapas-cena" aria-hidden="true">
+          <svg class="ilustracao" viewBox="0 0 1600 520" preserveAspectRatio="xMidYMid slice" role="presentation">
+            <defs><linearGradient id="ceu2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#07090c"/><stop offset=".62" stop-color="#1a1f28"/><stop offset=".63" stop-color="#14171c"/><stop offset="1" stop-color="#0d0f12"/></linearGradient>
+            <radialGradient id="gps" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#FFC21A" stop-opacity=".7"/><stop offset="1" stop-color="#FFC21A" stop-opacity="0"/></radialGradient></defs>
+            <rect width="1600" height="520" fill="url(#ceu2)"/>
+            <g fill="#14261b"><path d="M0 330 q40-60 80 0z M90 330 q50-80 100 0z M1300 330 q40-70 80 0z M1420 330 q60-90 120 0z"/></g>
+            <rect x="120" y="230" width="300" height="100" fill="#2a2e35"/><rect x="120" y="222" width="300" height="10" fill="#F5B800"/>
+            <rect x="170" y="250" width="200" height="34" fill="#111317"/><text x="270" y="275" text-anchor="middle" font-family="Barlow Condensed, sans-serif" font-weight="800" font-size="26" fill="#F5B800">THIAGO GUINCHOS</text>
+            <path d="M0 340 C 500 330, 900 400, 1600 360 L1600 470 C 900 510, 500 450, 0 470z" fill="#1d2025"/>
+            <path d="M0 405 C 500 390, 900 455, 1600 415" fill="none" stroke="#9a9da3" stroke-width="4" stroke-dasharray="50 40"/>
+            <path d="M420 430 C 700 430, 950 470, 1240 440" fill="none" stroke="#FFC21A" stroke-width="7" stroke-dasharray="1 18" stroke-linecap="round"/>
+            <g transform="translate(1250 400)"><path d="M0 40c3-14 15-22 34-24l28-14h52c11 0 18 6 26 16l12 4c5 2 7 5 7 10v8z" fill="#40576f"/><g fill="#0d0e10"><circle cx="34" cy="44" r="12"/><circle cx="130" cy="44" r="12"/></g><circle cx="0" cy="30" r="9" fill="#ffa21a"/><circle cx="160" cy="30" r="9" fill="#ffa21a"/><path d="M-40 52 l14-26 14 26z" fill="none" stroke="#e0281e" stroke-width="5"/></g>
+            <g transform="translate(700 380)">
+              <rect x="0" y="40" width="190" height="9" fill="#2f343c"/><rect x="0" y="49" width="190" height="4" fill="#F5B800"/>
+              <rect x="192" y="0" width="64" height="58" rx="6" fill="#f2f2ee"/><rect x="214" y="8" width="34" height="22" rx="3" fill="#0c1016"/><rect x="200" y="-6" width="24" height="7" rx="2" fill="#FFC21A"/>
+              <g fill="#0d0e10"><circle cx="50" cy="62" r="15"/><circle cx="90" cy="62" r="15"/><circle cx="230" cy="62" r="15"/></g>
+              <circle cx="224" cy="-44" r="34" fill="url(#gps)"/><path d="M224 -18c-10-12-16-20-16-28a16 16 0 0 1 32 0c0 8-6 16-16 28z" fill="#FFC21A" stroke="#111" stroke-width="3"/><circle cx="224" cy="-46" r="5" fill="#111"/>
+            </g>
+          </svg>
+          <canvas id="cena-etapas"></canvas>
+          <div class="etapas-vinheta"></div>
+        </div>
+        <div class="etapas-ui">
+          <div class="envoltorio etapas-cabeca">
+            <p class="marco"><b>KM 02</b>Do chamado à entrega</p>
+            <h2 id="t-como">Como funciona</h2>
+          </div>
+          <div class="envoltorio etapas-base">
+            <div class="etapas-progresso" aria-hidden="true">
+              <div class="trilha"><i class="enchimento"></i></div>
+              <b class="ponto" style="--i:0">1</b><b class="ponto" style="--i:1">2</b><b class="ponto" style="--i:2">3</b><b class="ponto" style="--i:3">4</b>
+            </div>
+            <ol class="trajeto">
+              <li class="passo"><div class="pino"><svg class="ico" aria-hidden="true"><use href="#i-whats"/></svg><span class="feito" aria-hidden="true"><svg class="ico"><use href="#i-check"/></svg></span></div><h3>1. Você chama</h3><p>WhatsApp ou telefone, a qualquer hora.</p></li>
+              <li class="passo"><div class="pino"><svg class="ico" aria-hidden="true"><use href="#i-caminhao"/></svg><span class="feito" aria-hidden="true"><svg class="ico"><use href="#i-check"/></svg></span></div><h3>2. Enviamos o mais próximo</h3><p>Frota rastreada: sai o caminhão mais perto.</p></li>
+              <li class="passo"><div class="pino"><svg class="ico" aria-hidden="true"><use href="#i-sinal"/></svg><span class="feito" aria-hidden="true"><svg class="ico"><use href="#i-check"/></svg></span></div><h3>3. Acompanhamento</h3><p>A central acompanha o trajeto em tempo real.</p></li>
+              <li class="passo"><div class="pino"><svg class="ico" aria-hidden="true"><use href="#i-escudo"/></svg><span class="feito" aria-hidden="true"><svg class="ico"><use href="#i-check"/></svg></span></div><h3>4. Entrega segura</h3><p>Fotos na coleta e veículo entregue no destino.</p></li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="depoimentos" class="depoimentos" aria-labelledby="t-depo">
+    <div class="envoltorio depo-topo">
+      <div>
+        <p class="marco claro"><b style="background:#16181B;color:#fff;border-color:#16181B;outline-color:#16181B">KM 03</b><span style="color:#4A4F57">Depoimentos</span></p>
+        <h2 id="t-depo">Quem já chamou</h2>
+      </div>
+      <div class="setas">
+        <button type="button" class="voltar" aria-label="Depoimentos anteriores" aria-controls="carrossel"><svg class="ico" aria-hidden="true"><use href="#i-seta"/></svg></button>
+        <button type="button" class="avancar" aria-label="Próximos depoimentos" aria-controls="carrossel"><svg class="ico" aria-hidden="true"><use href="#i-seta"/></svg></button>
+      </div>
+    </div>
+    <!-- Fotos ilustrativas do Unsplash (Unsplash License, uso comercial livre):
+         plataforma-noite-tobolenko.jpg  Vladyslav Tobolenko  https://unsplash.com/photos/E5hckifQtgg (images.unsplash.com/photo-1670931814837-72bdaa5e612a)
+         pos-acidente-malik.jpg          Usman Malik          https://unsplash.com/photos/kE__1vnDxg4 (images.unsplash.com/photo-1673187139211-1e7ec3dd60ec)
+         pesado-minzz.jpg                Marshall Minzz       https://unsplash.com/photos/arbzQ-DuP3Y (images.unsplash.com/photo-1682033239272-6b60b828a9a2)
+         caminhao-noite-stansberry.jpg   Edrece Stansberry    https://unsplash.com/photos/fInLmvnqbiY (images.unsplash.com/photo-1602607771743-9f829d8419e9)
+         Avatares: DiceBear, estilo "Notionists" de Zoish (CC0 1.0), gerados em api.dicebear.com/9.x/notionists e salvos em assets/avatares. -->
+    <ul class="carrossel" id="carrossel" aria-label="Depoimentos de clientes" tabindex="0">
+      <li><figure class="depo">
+        <div class="estrelas" role="img" aria-label="5 de 5 estrelas"><svg class="ico"><use href="#i-estrela"/></svg><svg class="ico"><use href="#i-estrela"/></svg><svg class="ico"><use href="#i-estrela"/></svg><svg class="ico"><use href="#i-estrela"/></svg><svg class="ico"><use href="#i-estrela"/></svg></div>
+        <blockquote>Atendimento impecável! O motorista foi educado, cuidadoso com meu carro e chegou no horário combinado. Ótimo serviço.</blockquote>
+        <figcaption><img src="assets/avatares/Mariana-Ferreira.svg" alt="" width="46" height="46" loading="lazy"><span>Mariana Ferreira<small>Cliente</small></span></figcaption>
+      </figure></li>
+      <li><figure class="depo">
+        <div class="estrelas" role="img" aria-label="5 de 5 estrelas"><svg class="ico"><use href="#i-estrela"/></svg><svg class="ico"><use href="#i-estrela"/></svg><svg class="ico"><use href="#i-estrela"/></svg><svg class="ico"><use href="#i-estrela"/></svg><svg class="ico"><use href="#i-estrela"/></svg></div>
+        <blockquote>Fiquei empenhado na estrada e o Thiago resolveu tudo com profissionalismo. Serviço rápido e seguro. Salvou meu dia!</blockquote>
+        <figcaption><img src="assets/avatares/Ricardo-Santos.svg" alt="" width="46" height="46" loading="lazy"><span>Ricardo Santos<small>Cliente</small></span></figcaption>
+      </figure></li>
+      <li><figure class="foto"><img src="assets/fotos/plataforma-noite-tobolenko.jpg" alt="Caminhão plataforma levando um carro à noite, sob a luz dos postes" loading="lazy" style="object-position:center 70%"><figcaption>Plataforma, de madrugada</figcaption></figure></li>
+      <li><figure class="depo">
+        <div class="estrelas" role="img" aria-label="5 de 5 estrelas"><svg class="ico"><use href="#i-estrela"/></svg><svg class="ico"><use href="#i-estrela"/></svg><svg class="ico"><use href="#i-estrela"/></svg><svg class="ico"><use href="#i-estrela"/></svg><svg class="ico"><use href="#i-estrela"/></svg></div>
+        <blockquote>Que alívio ter encontrado essa equipe! Mesmo tarde da noite, vieram rápido e me trataram com muita educação. Recomendo de olhos fechados.</blockquote>
+        <figcaption><img src="assets/avatares/Carlos-Menezes.svg" alt="" width="46" height="46" loading="lazy"><span>Carlos Menezes<small>Cliente</small></span></figcaption>
+      </figure></li>
+      <!-- depoimento de exemplo: trocar pelo real -->
+      <li data-exemplo="true"><figure class="depo">
+        <div class="estrelas" role="img" aria-label="5 de 5 estrelas"><svg class="ico"><use href="#i-estrela"/></svg><svg class="ico"><use href="#i-estrela"/></svg><svg class="ico"><use href="#i-estrela"/></svg><svg class="ico"><use href="#i-estrela"/></svg><svg class="ico"><use href="#i-estrela"/></svg></div>
+        <blockquote>Carro apagou na Estrada do Coco de madrugada. Chamei no WhatsApp e logo o guincho estava lá.</blockquote>
+        <figcaption><img src="assets/avatares/Juliana-Rocha.svg" alt="" width="46" height="46" loading="lazy"><span>Juliana Rocha<small>Cliente</small></span></figcaption>
+      </figure></li>
+      <!-- depoimento de exemplo: trocar pelo real -->
+      <li data-exemplo="true"><figure class="depo">
+        <div class="estrelas" role="img" aria-label="5 de 5 estrelas"><svg class="ico"><use href="#i-estrela"/></svg><svg class="ico"><use href="#i-estrela"/></svg><svg class="ico"><use href="#i-estrela"/></svg><svg class="ico"><use href="#i-estrela"/></svg><svg class="ico"><use href="#i-estrela"/></svg></div>
+        <blockquote>Precisei levar meu caminhão para outra cidade. Tudo combinado pelo WhatsApp, sem dor de cabeça.</blockquote>
+        <figcaption><img src="assets/avatares/Paulo-Henrique.svg" alt="" width="46" height="46" loading="lazy"><span>Paulo Henrique<small>Cliente</small></span></figcaption>
+      </figure></li>
+      <!-- depoimento de exemplo: trocar pelo real -->
+      <li data-exemplo="true"><figure class="depo">
+        <div class="estrelas" role="img" aria-label="5 de 5 estrelas"><svg class="ico"><use href="#i-estrela"/></svg><svg class="ico"><use href="#i-estrela"/></svg><svg class="ico"><use href="#i-estrela"/></svg><svg class="ico"><use href="#i-estrela"/></svg><svg class="ico"><use href="#i-estrela"/></svg></div>
+        <blockquote>Pneu furou com as crianças no carro. Equipe rápida e muito educada. Me senti segura.</blockquote>
+        <figcaption><img src="assets/avatares/Fernanda-Lima.svg" alt="" width="46" height="46" loading="lazy"><span>Fernanda Lima<small>Cliente</small></span></figcaption>
+      </figure></li>
+      <li><figure class="foto"><img src="assets/fotos/pos-acidente-malik.jpg" alt="Carro vermelho com a traseira amassada, preso com cintas sobre a plataforma do guincho" loading="lazy"><figcaption>Remoção pós-acidente</figcaption></figure></li>
+      <!-- depoimento de exemplo: trocar pelo real -->
+      <li data-exemplo="true"><figure class="depo">
+        <div class="estrelas" role="img" aria-label="5 de 5 estrelas"><svg class="ico"><use href="#i-estrela"/></svg><svg class="ico"><use href="#i-estrela"/></svg><svg class="ico"><use href="#i-estrela"/></svg><svg class="ico"><use href="#i-estrela"/></svg><svg class="ico"><use href="#i-estrela"/></svg></div>
+        <blockquote>A bateria arriou no estacionamento. Fizeram a carga ali mesmo e eu segui viagem.</blockquote>
+        <figcaption><img src="assets/avatares/Marcos-Vinicius.svg" alt="" width="46" height="46" loading="lazy"><span>Marcos Vinícius<small>Cliente</small></span></figcaption>
+      </figure></li>
+      <!-- depoimento de exemplo: trocar pelo real -->
+      <li data-exemplo="true"><figure class="depo">
+        <div class="estrelas" role="img" aria-label="5 de 5 estrelas"><svg class="ico"><use href="#i-estrela"/></svg><svg class="ico"><use href="#i-estrela"/></svg><svg class="ico"><use href="#i-estrela"/></svg><svg class="ico"><use href="#i-estrela"/></svg><svg class="ico"><use href="#i-estrela"/></svg></div>
+        <blockquote>Fiquei sem combustível na BA-099. Chegaram rápido e resolveram com toda a calma.</blockquote>
+        <figcaption><img src="assets/avatares/Adriana-Souza.svg" alt="" width="46" height="46" loading="lazy"><span>Adriana Souza<small>Cliente</small></span></figcaption>
+      </figure></li>
+      <!-- depoimento de exemplo: trocar pelo real -->
+      <li data-exemplo="true"><figure class="depo">
+        <div class="estrelas" role="img" aria-label="5 de 5 estrelas"><svg class="ico"><use href="#i-estrela"/></svg><svg class="ico"><use href="#i-estrela"/></svg><svg class="ico"><use href="#i-estrela"/></svg><svg class="ico"><use href="#i-estrela"/></svg><svg class="ico"><use href="#i-estrela"/></svg></div>
+        <blockquote>Acionei pela seguradora e o carro chegou na oficina sem um arranhão.</blockquote>
+        <figcaption><img src="assets/avatares/Roberto-Almeida.svg" alt="" width="46" height="46" loading="lazy"><span>Roberto Almeida<small>Cliente</small></span></figcaption>
+      </figure></li>
+      <li><figure class="foto"><img src="assets/fotos/pesado-minzz.jpg" alt="Caminhão pesado embarcado sobre um caminhão plataforma" loading="lazy"><figcaption>Reboque de pesados</figcaption></figure></li>
+      <!-- depoimento de exemplo: trocar pelo real -->
+      <li data-exemplo="true"><figure class="depo">
+        <div class="estrelas" role="img" aria-label="5 de 5 estrelas"><svg class="ico"><use href="#i-estrela"/></svg><svg class="ico"><use href="#i-estrela"/></svg><svg class="ico"><use href="#i-estrela"/></svg><svg class="ico"><use href="#i-estrela"/></svg><svg class="ico"><use href="#i-estrela"/></svg></div>
+        <blockquote>Fotografaram o carro antes de levar. Isso passa muita confiança.</blockquote>
+        <figcaption><img src="assets/avatares/Luciana-Prado.svg" alt="" width="46" height="46" loading="lazy"><span>Luciana Prado<small>Cliente</small></span></figcaption>
+      </figure></li>
+    </ul>
+  </section>
+
+  <div class="zebra" aria-hidden="true"></div>
+  <section id="contato" class="contato" aria-labelledby="t-contato">
+    <div class="envoltorio contato-grade">
+      <div class="revelar">
+        <p class="marco"><b>KM 04</b>Contato</p>
+        <h2 id="t-contato">Precisa de guincho agora?</h2>
+        <a class="placa placa-grande" href="tel:+5571982465436" aria-label="Ligar para (71) 98246-5436"><span class="faixa">BRASIL</span><span class="txt">(71) 98246-5436</span></a>
+        <div class="acoes">
+          <a class="btn btn-sinal" href="https://wa.me/5571982465436?text=Ol%C3%A1!%20Preciso%20de%20um%20guincho." target="_blank" rel="noopener"><svg class="ico" aria-hidden="true"><use href="#i-whats"/></svg>Chamar no WhatsApp</a>
+          <a class="btn btn-contorno" href="tel:+5571982465436"><svg class="ico" aria-hidden="true"><use href="#i-telefone"/></svg>Ligar agora</a>
+        </div>
+        <ul class="info">
+          <li><svg class="ico" aria-hidden="true"><use href="#i-pino"/></svg><span>Av. Luiz Gonzaga, 309, Quarenta e Seis, Camaçari/BA</span><a href="https://www.google.com/maps/search/?api=1&amp;query=Av.%20Luiz%20Gonzaga%2C%20309%2C%20Cama%C3%A7ari%20-%20BA%2C%2042809-082" target="_blank" rel="noopener">Ver no mapa</a></li>
+          <li><svg class="ico" aria-hidden="true"><use href="#i-insta"/></svg><a href="https://www.instagram.com/thiagoguinchosbr/" target="_blank" rel="noopener">@thiagoguinchosbr</a></li>
+        </ul>
+      </div>
+      <figure class="contato-foto revelar">
+        <img src="assets/fotos/caminhao-noite-stansberry.jpg" alt="Caminhão branco com giroflex no teto e faróis acesos, parado num pátio à noite com neblina" loading="lazy">
+        <figcaption><span class="pisca" aria-hidden="true"></span>24h disponível em Camaçari e região</figcaption>
+      </figure>
+    </div>
+  </section>
+</main>
+
+<footer class="rodape">
+  <div class="envoltorio rodape-linha">
+    <a class="marca" href="#inicio" aria-label="Thiago Guinchos, voltar ao topo">
+      <img src="assets/gancho.svg" alt="" width="44" height="44">
+      <span class="nome" aria-hidden="true"><span style="color:#fff">Thiago</span><span>Guinchos</span><small>entregando segurança</small></span>
+    </a>
+    <address>Thiago Guincho · Thiago Costa de Almeida · CNPJ 48.016.487/0001-27 (MEI)<br>Av. Luiz Gonzaga, 309, Quarenta e Seis, Camaçari/BA, CEP 42809-082</address>
+    <div class="links">
+      <a href="https://wa.me/5571982465436?text=Ol%C3%A1!%20Preciso%20de%20um%20guincho." target="_blank" rel="noopener"><svg class="ico" style="width:18px;height:18px" aria-hidden="true"><use href="#i-whats"/></svg>WhatsApp</a>
+      <a href="https://www.instagram.com/thiagoguinchosbr/" target="_blank" rel="noopener"><svg class="ico" style="width:18px;height:18px" aria-hidden="true"><use href="#i-insta"/></svg>Instagram</a>
+    </div>
+  </div>
+  <div class="envoltorio base">
+    <span>© <span id="ano">2026</span> Thiago Guinchos.</span>
+    <span>Protótipo para aprovação · fotos ilustrativas (Unsplash) · avatares DiceBear</span>
+  </div>
+</footer>
+
+<div class="barra-acao" role="region" aria-label="Contato rápido">
+  <a class="btn btn-sinal" href="https://wa.me/5571982465436?text=Ol%C3%A1!%20Preciso%20de%20um%20guincho." target="_blank" rel="noopener"><svg class="ico" aria-hidden="true"><use href="#i-whats"/></svg>WhatsApp</a>
+  <a class="btn btn-contorno" href="tel:+5571982465436"><svg class="ico" aria-hidden="true"><use href="#i-telefone"/></svg>Ligar</a>
+</div>
+
+<script>
+(function () {
+  document.documentElement.classList.add('js');
+  var ano = document.getElementById('ano'); if (ano) ano.textContent = new Date().getFullYear();
+
+  var botao = document.querySelector('.menu-btn'), painel = document.getElementById('menu-celular');
+  function definir(aberto) {
+    painel.classList.toggle('aberto', aberto);
+    botao.setAttribute('aria-expanded', String(aberto));
+    botao.setAttribute('aria-label', aberto ? 'Fechar menu' : 'Abrir menu');
+    botao.querySelector('use').setAttribute('href', aberto ? '#i-fechar' : '#i-menu');
+  }
+  botao.addEventListener('click', function () { definir(!painel.classList.contains('aberto')); });
+  painel.addEventListener('click', function (e) { if (e.target.closest('a')) definir(false); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && painel.classList.contains('aberto')) { definir(false); botao.focus(); } });
+
+  var trilho = document.getElementById('carrossel');
+  function passo() { var c = trilho.querySelector('li'); return c ? c.getBoundingClientRect().width + 14 : 320; }
+  document.querySelector('.setas .voltar').addEventListener('click', function () { trilho.scrollBy({ left: -passo() * 2, behavior: 'smooth' }); });
+  document.querySelector('.setas .avancar').addEventListener('click', function () { trilho.scrollBy({ left: passo() * 2, behavior: 'smooth' }); });
+
+  var itens = document.querySelectorAll('.revelar');
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (en) {
+      en.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('visivel'); io.unobserve(e.target); } });
+    }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
+    itens.forEach(function (el, i) { el.style.transitionDelay = ((i % 6) * 60) + 'ms'; io.observe(el); });
+  } else { itens.forEach(function (el) { el.classList.add('visivel'); }); }
+})();
+</script>
+
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.min.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+} }
+</script>
+<script type="module" src="assets/cena.js"></script>
+</body>
+</html>
