@@ -1,0 +1,15 @@
+{
+  "name": "thiago-guinchos-site",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Site institucional da Thiago Guinchos (guincho 24 horas em Camaçari/BA), com cena 3D do guincho em Three.js.",
+  "type": "module",
+  "scripts": {
+    "montar": "node scripts/montar.mjs",
+    "verificar": "node scripts/montar.mjs --verificar",
+    "servir": "npx --yes serve@14.2.4 -l 4173 ."
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
